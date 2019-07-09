@@ -3,17 +3,13 @@
 # All written by Sam Reeves
 # s@mmk.global
 
-
-
-import time
 from urllib.request import urlopen
 import datetime
-import pandas as pd
 import json
 from os import path
 import ast
 
-date = pd.to_datetime('today')
+date = datetime.datetime.now().date()
 url_base = 'https://forex.cbm.gov.mm/api/history/'
 
 # Get and save the list of currencies
@@ -40,25 +36,15 @@ def getDay(date):
     return [data]
 
 
-# Local data   [ [date, dump], [], ... ]
-local_data = []
-null_count = 0
-
 #%%
 # Loop across the set, storing data
 
-while null_count <= 100:
-    day = {date : getDay(date)}
-    local_data.insert(0, day)
+for i in range(3650):
+    if path.exists(str(date)+'.json') == False:
+        day = str(getDay(date))
+        if day != '[[]]':
+            f = open(str(date)+'.json', "w")
+            f.write(str(day))
+            f.close()
     date = date - datetime.timedelta(days=1)
-    
-    if local_data[1] and local_data[0] == []:
-        null_count +=1
-        
-    else:
-        null_count = 0
-    time.sleep(3)
 
-#%%
-# Write out the data
-    
