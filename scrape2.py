@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+chr#!/usr/bin/env python3
 
 # All written by Sam Reeves
 # s@mmk.global
@@ -45,8 +45,11 @@ def checkDay(date):
         return day
 
 #%%
-
-for i in range(5000):
+#
+# DONT FORGET
+#
+# Range of days defaults to 10!
+for i in range(10):
     day = checkDay(date)
     rates = rates.append(day)
     date = date - datetime.timedelta(days=1)
