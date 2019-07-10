@@ -19,3 +19,11 @@ there is no data on that day.  As
 the dataset goes back in time, it 
 becomes more sparse.
 
+    .pkl files
+These are python pickle objects.  I
+am using Python 3, so these are generated
+with the library dill.  db.pkl is a 
+pandas DataFrame object.  index.pkl is
+a list of dates that correspond to the
+rows in db.pkl.  The columns are given
+in currencies.pkl.

@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jul  8 20:39:03 2019
 
-@author: s
-"""
+# All written by Sam Reeves
+# s@mmk.global
 
 import os
 import datetime
@@ -16,6 +13,7 @@ import dill
 
 db = []
 
+# Read in the files
 for filename in os.listdir(os.getcwd()):
     date = datetime.datetime.strptime(os.path.splitext(filename)[0], '%Y-%m-%d')
     date = date.date()
@@ -28,8 +26,8 @@ for filename in os.listdir(os.getcwd()):
     
     
 #%%
-    
-    
+
+# Create a clean dataframe with index and column names
 db = sorted(db)
 currencies = list(db[0][1].keys())
 index = []
@@ -44,6 +42,8 @@ for item in db:
 df = pd.DataFrame(rates, index= index, columns= currencies)
 #%%
 
+
+# Write out the data
 df.to_pickle("db.pkl")
 
 with open('index.pkl', 'wb') as f:
