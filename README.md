@@ -19,6 +19,12 @@ Pickle.
 
 -------------------------------------------------
 
+    train.py
+This script runs linear and ridge regression on
+the data to produce a prediction for tomorrow.
+
+-------------------------------------------------
+
     .pkl files
 These are python pickle objects.  I
 am using Python 3, so these are generated
@@ -36,13 +42,22 @@ images to put on the website.
 
 -------------------------------------------------
 
-	scrape.py *DEPRICATED*
-This script scrapes the web for data
-concerning currency trading prices 
-of the Myanmar Kyat.  Output is a 
-.json file for each day.  It also
-makes a separate file with the
-list of currencies.
+    clean.py *DEPRICATED* (see scrape2.py)
+This script loads in all the files created by
+scrape.py and cleans the data before outputting
+a .pkl file with the rates.  This became the 
+jumping-off point for rewriting the initial
+scraper with these functionalities.
+
+-------------------------------------------------
+
+	scrape.py *DEPRICATED* (see scrape2.py)
+This script scrapes the web for data concerning 
+currency trading prices of the Myanmar Kyat.
+Output is a .json file for each day.  NOTE: this
+can easily be converted to JSON format, but it 
+really isn't JSON.  It also makes a separate file
+currencies.pkl with the list of currencies.
 
 It is set to get the last ten years
 of data, skipping requests if a record 

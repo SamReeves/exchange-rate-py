@@ -1,4 +1,4 @@
-chr#!/usr/bin/env python3
+#!/usr/bin/env python3
 
 # All written by Sam Reeves
 # s@mmk.global
@@ -23,7 +23,9 @@ def getDay(date):
     response = urlopen(url_base + date.strftime('%d-%m-%Y'))
     response = response.read()
     data = json.loads(response)
-    data = data['rates']
+    data = pd.Series(data['rates'], name=date)
+    for i in range(len(data)):
+        data.iloc[i] = data.iloc[i].replace(',','')
     return data
 
 
@@ -38,9 +40,7 @@ def checkDay(date):
     else:
         day = getDay(date)
         # If the query returns data
-        if str(day) != '[[]]':
-            day = pd.Series(day, name=date)
-        else:
+        if day.isna():
             day = pd.Series([None]*38, name=date)
         return day
 
@@ -53,10 +53,11 @@ for i in range(10):
     day = checkDay(date)
     rates = rates.append(day)
     date = date - datetime.timedelta(days=1)
-    
-rates.sort_index()
 
 #%%
+rates = rates.sort_index()
+first = rates.first_valid_index()
+rates = rates.loc[first:]
 
 with open('rates.pkl', 'wb') as f:
     dill.dump(rates, f)
