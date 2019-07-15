@@ -35,12 +35,9 @@ def getDay(date):
 # returns empty, append a list of None.
 
 def checkDay(date):
-    if (date in rates.index):
-        return
-    else:
-        day = getDay(date)
+        day = pd.Series(getDay(date), name=date)
         # If the query returns data
-        if day.isna():
+        if day.isnull().values.any():
             day = pd.Series([None]*38, name=date)
         return day
 
@@ -50,8 +47,9 @@ def checkDay(date):
 #
 # Range of days defaults to 10!
 for i in range(10):
-    day = checkDay(date)
-    rates = rates.append(day)
+    if date not in rates.index:
+        day = checkDay(date)
+        rates = rates.append(day)
     date = date - datetime.timedelta(days=1)
 
 #%%
