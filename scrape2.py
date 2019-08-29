@@ -4,11 +4,13 @@
 # s@mmk.global
 
 from urllib.request import urlopen
-import datetime
+import datetime, time, os
 import json
 import dill
 import pandas as pd
 
+os.environ['TZ'] = 'Asia/Rangoon'
+time.tzset()
 date = datetime.datetime.now().date()
 url_base = 'https://forex.cbm.gov.mm/api/history/'
 
@@ -17,7 +19,7 @@ with open('rates.pkl', 'rb') as file:
     rates = dill.load(file)
 
 
-# Return a day's json from the CBM website
+# Return a day's JSON from the CBM website
 
 def getDay(date):
     response = urlopen(url_base + date.strftime('%d-%m-%Y'))
@@ -29,7 +31,6 @@ def getDay(date):
     return data
 
 
-#%%
 # Search the db for records.  If no record is
 # found, try to get it from the web.  If it 
 # returns empty, append a list of None.
@@ -41,18 +42,17 @@ def checkDay(date):
             day = pd.Series([None]*38, name=date)
         return day
 
-#%%
 #
 # DONT FORGET
 #
-# Range of days defaults to 10!
-for i in range(10):
+# Range of days defaults to 5!
+for i in range(90):
     if date not in rates.index:
         day = checkDay(date)
         rates = rates.append(day)
     date = date - datetime.timedelta(days=1)
 
-#%%
+
 rates = rates.sort_index()
 first = rates.first_valid_index()
 rates = rates.loc[first:]

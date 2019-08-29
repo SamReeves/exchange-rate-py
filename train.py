@@ -8,14 +8,16 @@ import numpy as np
 import dill
 import sklearn.model_selection
 import datetime
+import time, os
 
+os.environ['TZ'] = 'Asia/Rangoon'
+time.tzset()
 date = datetime.datetime.now().date()
 
 with open('rates.pkl', 'rb') as file:
     rates = dill.load(file)
 rates = rates.fillna(method='ffill')
 
-#%%
 def predictN(n):
     X = rates[:-n]
     y = rates[n:]
