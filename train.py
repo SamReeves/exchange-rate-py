@@ -22,7 +22,6 @@ def predictN(n):
     X = rates[:-n]
     y = rates[n:]
 
-
 # Train / Test Split
 # X, y
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X,y)
