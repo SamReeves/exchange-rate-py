@@ -7,18 +7,27 @@ Created on Tue Sep 24 06:10:59 2019
 """
 
 import requests
-import datetime
+import pendulum
 
+# Magic numbers......
 
-API_KEY = "7729b3a8af2ca6efe3ff51ebe767c2af"
+API_KEY = "access_key=7729b3a8af2ca6efe3ff51ebe767c2af"
 URL = "http://data.fixer.io/api/"
+TODAY = pendulum.today()
+TODAY = TODAY.strftime('%Y-%m-%d')
 
-DATE = datetime.date.today()
-DATE = DATE.strftime('%Y-%m-%d')
+### Available Fixer.io endpoints:
+# latest -- gives all latest rates
+# convert -- from = GBP, to = JPY
+# historical -- date as endpoint string
+# timeseries -- start_date, end_date = YYYY-MM-DD
+# fluctuation -- start_date, end_date = YYYY-MM-DD
 
-BASE = "MMK"
 
-parameters = {
-        "url" : "http://data.fixer.io/api/",
-        "access_key" : API_KEY,
-        "base" : BASE }
+
+def getData(endPoint="latest", base, timeFrame=TODAY):
+    parameters = str(URL+ENDPOINT+"?"+API_KEY)
+    response = requests.get(parameters)
+    content = response.content
+    return content
+
