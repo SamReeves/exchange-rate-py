@@ -10,7 +10,7 @@ Still in development.
 ------------------------------------------------
 
     scrape2.py
-This This script scrapes the web for data
+This script scrapes the web for data
 concerning currency trading prices 
 of the Myanmar Kyat.  Output is rates.pkl,
 a Pandas DataFrame with all the information
