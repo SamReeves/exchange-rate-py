@@ -11,10 +11,12 @@ import pendulum
 
 # Magic numbers......
 
-API_KEY = "access_key=7729b3a8af2ca6efe3ff51ebe767c2af"
+API_KEY = "?access_key=7729b3a8af2ca6efe3ff51ebe767c2af"
 URL = "http://data.fixer.io/api/"
 TODAY = pendulum.today()
 TODAY = TODAY.strftime('%Y-%m-%d')
+
+#%%
 
 ### Available Fixer.io endpoints:
 # latest -- gives all latest rates
@@ -23,11 +25,19 @@ TODAY = TODAY.strftime('%Y-%m-%d')
 # timeseries -- start_date, end_date = YYYY-MM-DD
 # fluctuation -- start_date, end_date = YYYY-MM-DD
 
-
-
-def getData(endPoint="latest", base, timeFrame=TODAY):
-    parameters = str(URL+ENDPOINT+"?"+API_KEY)
+def grabData(parameters):
     response = requests.get(parameters)
     content = response.content
     return content
 
+def getLatest(base):
+    parameters = str(URL + "latest" + API_KEY)
+    return grabData(parameters)
+
+def getFullHist(end=TODAY, base="mmk"):
+    parameters = str(URL + end + API_KEY + "&" + base)
+    return grabData(parameters)
+
+def getTS(start="2012-01-01", end=TODAY, base="mmk"):
+    parameters = str(URL + "timeseries" + API_KEY + "&" + start + "&" + end)
+    return grabData(parameters)

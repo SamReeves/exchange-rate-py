@@ -1,7 +1,13 @@
 # mmk
 kyat prediction with sklearn
 
--------------------------------------------------
+------------------------------------------------
+    scrape3.py
+An updated scraper that makes API calls to 
+fixer.io and exports csv data to our DB.
+Still in development.
+
+------------------------------------------------
 
     scrape2.py
 This This script scrapes the web for data
