@@ -6,7 +6,6 @@ Created on Fri Oct 25 11:11:02 2019
 """
 
 import pandas as pd
-import numpy as np
 import dill
 import sklearn
 from sklearn.ensemble import GradientBoostingRegressor
@@ -34,10 +33,10 @@ with open('rates.pkl', 'rb') as file:
     rates = dill.load(file)
 rates = rates.fillna(method='ffill')
 #%%
+
 def predictN(n):
     X = rates[:-n]
-    y = rates[n]
-
+    y = rates[n:]
 # Train / Test Split
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X,y)
 
@@ -47,8 +46,7 @@ def predictN(n):
     upper_model.fit(X_train, y_train)
 
     predictions = pd.DataFrame(y_test)
-    predictions['lower'] = lower_model.predict([np.array(rates.iloc[-1])])
-    predictions['mid'] = mid_model.predict([np.array(rates.iloc[-1])])
-    predictions['upper'] = upper_model.predict([np.array(rates.iloc[-1])])
-    
-    return predictions
+    predictions['lower'] = lower_model.predict(X_test)
+    predictions['mid'] = mid_model.predict(X_test)
+    predictions['upper'] = upper_model.predict(X_test)
+

@@ -44,6 +44,7 @@ for day in range(0, total_days + 1):
         os.makedirs(data_path)
 
     os.chdir(data_path)
+    
 # Simple loop to add some level of user-friendliness to the program.
     with open(title + '.json', "w") as entry:
         file_path = entry

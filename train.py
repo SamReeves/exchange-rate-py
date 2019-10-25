@@ -26,17 +26,17 @@ def predictN(n):
 # X, y
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X,y)
 
-# Linear Regression
+# Train Linear Regression
     from sklearn.linear_model import LinearRegression
     reg = LinearRegression().fit(X,y)
 
-# Ridge Regression
-    from sklearn.linear_model import Ridge
-    ridge = Ridge().fit(X,y)
+# Train Ridge Regression
+    #from sklearn.linear_model import Ridge
+    #ridge = Ridge().fit(X,y)
      
 # Scoring the algorithms
     print(reg.score(X,y))
-    print(ridge.score(X,y))
+    #print(ridge.score(X,y))
 
 
 # Predict the nth day
