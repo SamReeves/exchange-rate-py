@@ -18,7 +18,7 @@ with open('rates.pkl', 'rb') as file:
     rates = dill.load(file)
 rates = rates.fillna(method='ffill')
 
-def predictN(n):
+def predictN(n=1):
     X = rates[:-n]
     y = rates[n:]
 
