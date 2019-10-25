@@ -8,6 +8,7 @@ Created on Tue Sep 24 06:10:59 2019
 
 import requests
 import pendulum
+import json
 
 # Magic numbers......
 
@@ -34,10 +35,12 @@ def getLatest(base):
     parameters = str(URL + "latest" + API_KEY)
     return grabData(parameters)
 
-def getFullHist(end=TODAY, base="mmk"):
-    parameters = str(URL + end + API_KEY + "&" + base)
+def getHist(date=TODAY, base="mmk"):
+    parameters = str(URL + date + API_KEY + "&" + base)
     return grabData(parameters)
 
 def getTS(start="2012-01-01", end=TODAY, base="mmk"):
     parameters = str(URL + "timeseries" + API_KEY + "&" + start + "&" + end)
     return grabData(parameters)
+
+#%%
