@@ -45,7 +45,7 @@ def checkDay(date):
 #
 # DONT FORGET
 #
-# Range of days defaults to 5!
+# Range of days defaults to 90!
 for i in range(90):
     if date not in rates.index:
         day = checkDay(date)
