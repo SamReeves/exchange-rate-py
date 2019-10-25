@@ -37,8 +37,8 @@ upper_model = GradientBoostingRegressor(loss="quantile", alpha=UPPER_ALPHA)
 #%%
 
 def predictN(n=1):
-    X = rates[:-n]
-    y = rates[n:]
+    X = np.array(rates[:-n])
+    y = np.array(rates[n:])
 # Train / Test Split
 #    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X,y)
 
@@ -54,8 +54,8 @@ def predictN(n=1):
 
 # Predict new values
     new_values = pd.DataFrame()
-    new_values['lower'] = lower_model.predict([np.array(rates.iloc[-1])])[0]
-    new_values['mid'] = mid_model.predict([np.array(rates.iloc[-1])])[0]
-    new_values['upper'] = upper_model.predict([np.array(rates.iloc[-1])])[0]
+    new_values['lower'] = lower_model.predict([np.array(rates.iloc[-1:])])[0]
+    new_values['mid'] = mid_model.predict([np.array(rates.iloc[-1:])])[0]
+    new_values['upper'] = upper_model.predict([np.array(rates.iloc[-1:])])[0]
     
     return new_values
