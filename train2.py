@@ -17,45 +17,29 @@ import time, os
 os.environ['TZ'] = 'Asia/Rangoon'
 time.tzset()
 date = datetime.datetime.now().date()
+n = 1
 
 # Load the history
 with open('rates.pkl', 'rb') as file:
     rates = dill.load(file)
 rates = rates.fillna(method='ffill')
 
-# Set lower and upper quantiles
-# To show prediction intervals, we must make 3 separate models
-
-LOWER_ALPHA = 0.1
-UPPER_ALPHA = 0.9
-
-lower_model = GradientBoostingRegressor(loss="quantile", alpha=LOWER_ALPHA)
-mid_model = GradientBoostingRegressor(loss="ls")
-upper_model = GradientBoostingRegressor(loss="quantile", alpha=UPPER_ALPHA)
-
-
-#%%
-
-def predictN(n=1):
-    X = np.array(rates[:-n])
-    y = np.array(rates[n:])
+X = np.array(rates[:-n])[0].reshape(-1,1)
+y = np.array(rates[n:])[0]
+    
 # Train / Test Split
 #    X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X,y)
 
-# Linear regression fit with intervals
-    lower_model.fit(X, y)
-    mid_model.fit(X, y)
-    upper_model.fit(X, y)
+# Set lower and upper quantiles
+# To show prediction intervals, we must make 3 separate models
+LOWER_ALPHA = 0.2
+UPPER_ALPHA = 0.8
 
-    predictions = pd.DataFrame(y)
-    predictions['lower'] = lower_model.predict(X)
-    predictions['mid'] = mid_model.predict(X)
-    predictions['upper'] = upper_model.predict(X)
+lower_model = GradientBoostingRegressor(loss="quantile", alpha=LOWER_ALPHA).fit(X,y)
+mid_model = GradientBoostingRegressor(loss="ls").fit(X,y)
+upper_model = GradientBoostingRegressor(loss="quantile", alpha=UPPER_ALPHA).fit(X,y)
 
-# Predict new values
-    new_values = pd.DataFrame()
-    new_values['lower'] = lower_model.predict([np.array(rates.iloc[-1:])])[0]
-    new_values['mid'] = mid_model.predict([np.array(rates.iloc[-1:])])[0]
-    new_values['upper'] = upper_model.predict([np.array(rates.iloc[-1:])])[0]
-    
-    return new_values
+predictions = pd.DataFrame(y)
+predictions['lower'] = lower_model.predict(X)
+predictions['mid'] = mid_model.predict(X)
+predictions['upper'] = upper_model.predict(X)
