@@ -1,61 +1,73 @@
 #!/usr/bin/env python3
 
 # All written by Sam Reeves
-# s@mmk.global
+# samtreeves@gmail.com
 
 from urllib.request import urlopen
-import datetime, time, os
+import datetime
+import time
+import os
 import json
 import dill
 import pandas as pd
 
-os.environ['TZ'] = 'Asia/Rangoon'
-time.tzset()
-date = datetime.datetime.now().date()
 url_base = 'https://forex.cbm.gov.mm/api/history/'
 
-# Load data
-with open('rates.pkl', 'rb') as file:
-    rates = dill.load(file)
+def setTZandDate():
+    os.environ['TZ'] = 'Asia/Rangoon'
+    time.tzset()
+    date = datetime.datetime.now().date()
+    return date
 
 
-# Return a day's JSON from the CBM website
+# Load data from Python3 dill
+def loadArchive():
+    with open('rates.pkl', 'rb') as file:
+        rates = dill.load(file)
+    return rates
 
-def getDay(date):
+
+# Check archive for records.  If no record exists, try to get it from the web.
+# If it returns empty, append a list of None.
+def checkArchive(date):
+    day = pd.Series(downloadData(date), name=date)
+    if day.isnull().values.any():
+        day = pd.Series([None]*38, name=date)
+    return day
+
+
+# Return a day's JSON from the CBM website.
+def downloadData(date, url_base):
     response = urlopen(url_base + date.strftime('%d-%m-%Y'))
     response = response.read()
+    
     data = json.loads(response)
     data = pd.Series(data['rates'], name=date)
+    
     for i in range(len(data)):
-        data.iloc[i] = data.iloc[i].replace(',','')
+        data.iloc[i] = data.iloc[i].replace(',', '')
     return data
 
+# Ouput any new information scraped from the web.
+def updateArchive(span=365):
+    date = setTZandDate()
+    rates = loadArchive()
+    
+    for i in range(span):
+        if date not in rates.index:
+            day = checkArchive(date)
+            rates = rates.append(day)
+            date = date - datetime.timedelta(days=1)
 
-# Search the db for records.  If no record is
-# found, try to get it from the web.  If it 
-# returns empty, append a list of None.
+    rates = rates.sort_index()
+    first = rates.first_valid_index()
+    rates = rates.loc[first:]
 
-def checkDay(date):
-        day = pd.Series(getDay(date), name=date)
-        # If the query returns data
-        if day.isnull().values.any():
-            day = pd.Series([None]*38, name=date)
-        return day
+    with open('rates.pkl', 'wb') as f:
+        dill.dump(rates, f)
+    return
 
-#
-# DONT FORGET
-#
-# Range of days defaults to 90!
-for i in range(90):
-    if date not in rates.index:
-        day = checkDay(date)
-        rates = rates.append(day)
-    date = date - datetime.timedelta(days=1)
-
-
-rates = rates.sort_index()
-first = rates.first_valid_index()
-rates = rates.loc[first:]
-
-with open('rates.pkl', 'wb') as f:
-    dill.dump(rates, f)
+# Test to see if the archive matches the info from the web.
+def reconcileArchive():
+    return
+    
