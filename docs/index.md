@@ -6,7 +6,7 @@ This software predicts exchange rates for currencies traded with the Myanmar cur
 
 scrape.py is a basic web scraper written with urllib.  It checks its own database to look for missing data points and makes requests for json data to the [Central Bank of Myanmar](https://forex.cbm.gov.mm/api/).  At this point the information is stored in a [Pandas DataFrame](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html) object and preserved with [dill](https://pypi.org/project/dill/).
 
-`
+```
         /* latest.json */ 
         { 
             "info":"Central Bank of Myanmar", 
@@ -22,13 +22,13 @@ scrape.py is a basic web scraper written with urllib.  It checks its own databas
                 "AUD":"759" 
                 } 
             } 
-`
+```
 
 train.py is what actually does the work.  This is another basic script which leverages [scikit-learn](https://scikit-learn.org/stable/modules/classes.html#module-sklearn.linear_model) to split the data into training and test sets, and perform two types of regression.
 
 The output is a Series containing a value for each currency, and a value from the built in scoring algorithm:
 
-`
+```
 (AUD    1021.400811 
  BDT      15.509807 
  BND     993.011276 
@@ -109,7 +109,7 @@ The output is a Series containing a value for each currency, and a value from th
  Name: 2021-01-09, dtype: float64, 
  0.9981319096033762, 
  0.9981984205553264) 
-`
+```
 
 ## About the developer
 
