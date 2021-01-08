@@ -26,7 +26,6 @@ def loadArchive():
         rates = dill.load(file)
     return rates
 
-
 # Check archive for records.  If no record exists, try to get it from the web.
 # If it returns empty, append a list of None.
 def checkArchive(date):
@@ -37,7 +36,7 @@ def checkArchive(date):
 
 
 # Return a day's JSON from the CBM website.
-def downloadData(date, url_base):
+def downloadData(date, url_base=url_base):
     response = urlopen(url_base + date.strftime('%d-%m-%Y'))
     response = response.read()
     
@@ -67,7 +66,4 @@ def updateArchive(span=365):
         dill.dump(rates, f)
     return
 
-# Test to see if the archive matches the info from the web.
-def reconcileArchive():
-    return
     
