@@ -60,7 +60,7 @@ def scoreModels(lin_reg, ridge_reg, lin_try, ridge_try, y_test):
 
 #%%
 # Predict the nth day
-def predictInterval(interval):
+def predictInterval(interval=1):
     
     # Split the data
     X_train, X_test, y_train, y_test = splitData(interval)
